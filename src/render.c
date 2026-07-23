@@ -1,12 +1,9 @@
 #include "render.h"
-
-
-
+#include <stdio.h>
 
 void initSDL(App *app)
 {
     int rendererFlags, windowFlags;
-
 
     rendererFlags = SDL_RENDERER_ACCELERATED;
 
@@ -37,9 +34,8 @@ void initSDL(App *app)
     }
 
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-
 }
-//键盘输入监听============
+// 键盘输入监听============
 int doInput(App *app)
 {
     SDL_Event event;
@@ -48,20 +44,20 @@ int doInput(App *app)
     {
         switch (event.type)
         {
-            case SDL_QUIT:
-                // exit(0);
-                return 1;
-                break;
-            case SDL_KEYDOWN:
-                doKeyDown(app,&event.key);
-                break;
+        case SDL_QUIT:
+            // exit(0);
+            return 1;
+            break;
+        case SDL_KEYDOWN:
+            doKeyDown(app, &event.key);
+            break;
 
-            case SDL_KEYUP:
-                doKeyUp(app,&event.key);
-                break;
+        case SDL_KEYUP:
+            doKeyUp(app, &event.key);
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
     return 0;
@@ -94,11 +90,10 @@ void doKeyDown(App *app, SDL_KeyboardEvent *event)
         {
             app->fire = 1;
         }
-
     }
 }
 
-void doKeyUp(App *app,SDL_KeyboardEvent *event)
+void doKeyUp(App *app, SDL_KeyboardEvent *event)
 {
     if (event->repeat == 0)
     {
@@ -127,21 +122,21 @@ void doKeyUp(App *app,SDL_KeyboardEvent *event)
         }
     }
 }
-//边界判断
-  void move(const App *app,Plane *player,const int speed)
-  {
-        if (app->up && player->y > 0)
-            player->y -= 4*speed;
+// 边界判断
+void move(const App *app, Plane *player, const int speed)
+{
+    if (app->up && player->y > 0)
+        player->y -= 4 * speed;
 
-        if (app->down && player->y + player->height < SCREEN_HEIGHT)
-            player->y += 4*speed;
+    if (app->down && player->y + player->height < SCREEN_HEIGHT)
+        player->y += 4 * speed;
 
-        if (app->left && player->x > 0)
-            player->x -= 4*speed;
+    if (app->left && player->x > 0)
+        player->x -= 4 * speed;
 
-        if (app->right && player->x + player->width < SCREEN_WIDTH)
-            player->x += 4*speed;
-  }
+    if (app->right && player->x + player->width < SCREEN_WIDTH)
+        player->x += 4 * speed;
+}
 
 //===========绘图代码=========
 
@@ -156,7 +151,7 @@ void presentScene(App *app)
     SDL_RenderPresent(app->renderer);
 }
 
-//销毁
+// 销毁
 void cleanup(App *app)
 {
     printf("退出====\n");
@@ -164,30 +159,29 @@ void cleanup(App *app)
     SDL_DestroyWindow(app->window);
     SDL_Quit();
 }
-//加载贴图
-SDL_Texture *loadTexture(App *app,char *filename)
+// 加载贴图
+SDL_Texture *loadTexture(App *app, char *filename)
 {
     SDL_Texture *texture;
 
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
 
     texture = IMG_LoadTexture(app->renderer, filename);
-     if (!texture) {
-          printf("Failed to load %s: %s\n", filename, IMG_GetError());
-      }
+    if (!texture)
+    {
+        printf("Failed to load %s: %s\n", filename, IMG_GetError());
+    }
 
     return texture;
 }
 
-//绘制纹理
-void blit(App *app,SDL_Texture *texture, int x, int y)
+// 绘制纹理
+void blit(App *app, SDL_Texture *texture, int x, int y)
 {
     SDL_Rect dest;
 
     dest.x = x;
     dest.y = y;
-    
-
 
     SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 

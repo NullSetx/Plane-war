@@ -13,8 +13,8 @@
 
 #define TEST_DATA 10
 
-int main(int argc, char const *argv[]) 
-{ 
+int main(int argc, char *argv[])
+{
     // Enemy e;
     // Bullet b;
     // LinkedList *enemy_list = NULL,*bullet_list = NULL;
@@ -48,51 +48,49 @@ int main(int argc, char const *argv[])
     Bullet bullet;
 
     memset(&app, 0, sizeof(App));
-    memset(&player,0,sizeof(Plane));
-    memset(&bullet,0,sizeof(Bullet));
+    memset(&player, 0, sizeof(Plane));
+    memset(&bullet, 0, sizeof(Bullet));
     initSDL(&app);
     player.x = 100;
     player.y = 100;
     player.speed = 2;
-    player.texture = loadTexture(&app,"../assets/playerShip.png");
-    bullet.texture = loadTexture(&app,"../assets/laserBlue03.png");
+    player.texture = loadTexture(&app, "../assets/playerShip.png");
+    bullet.texture = loadTexture(&app, "../assets/laserBlue03.png");
     SDL_QueryTexture(player.texture, NULL, NULL, &player.width, &player.height);
     SDL_QueryTexture(bullet.texture, NULL, NULL, &bullet.width, &bullet.height);
     while (1)
     {
         prepareScene(&app);
 
-        if(doInput(&app))
+        if (doInput(&app))
             break;
 
-        //键盘输入移动玩家
-        move(&app,&player,player.speed);
-        if (app.fire )
+        // 键盘输入移动玩家
+        move(&app, &player, player.speed);
+        if (app.fire)
         {
-            bullet.x = player.x+player.width/2;
-            bullet.y = player.y-player.height/2;
+            bullet.x = player.x + player.width / 2;
+            bullet.y = player.y - player.height / 2;
             bullet.speed = 8;
             bullet.level = 1;
             bullet.is_player = 1;
             bullet.hp = 1;
         }
-        if(bullet.y<0)
+        if (bullet.y < 0)
         {
             bullet.hp = 0;
         }
-        blit(&app,player.texture,player.x,player.y);
-        if(bullet.hp)
+        blit(&app, player.texture, player.x, player.y);
+        if (bullet.hp)
         {
-             printf("bullet: %d, %d\n", bullet.x, bullet.y);
-            blit(&app,bullet.texture,bullet.x,bullet.y);
-            bullet.y-=bullet.speed;
+            printf("bullet: %d, %d\n", bullet.x, bullet.y);
+            blit(&app, bullet.texture, bullet.x, bullet.y);
+            bullet.y -= bullet.speed;
         }
         presentScene(&app);
 
         SDL_Delay(16);
     }
-
-
 
     cleanup(&app);
     return 0;
