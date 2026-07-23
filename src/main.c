@@ -16,12 +16,14 @@ int main(int argc, char *argv[])
     Plane player;
     Bullet bullet;
     Enemy enemy;
+    Enemy heart;
 
     LinkedList *enemy_list = NULL, *bullet_list = NULL;
     bullet_list = create_list(sizeof(Bullet));
     enemy_list = create_list(sizeof(Enemy));
     int hp=0;
     char score_buf[32];
+    char hp_buf[32];
     
 
     memset(&app, 0, sizeof(App));
@@ -42,8 +44,11 @@ int main(int argc, char *argv[])
     player.texture = loadTexture(&app, "../assets/playerShip.png");
     bullet.texture = loadTexture(&app, "../assets/laserBlue03.png");
     enemy.texture = loadTexture(&app,"../assets/enemyGreen2.png");
+    heart.texture = loadTexture(&app,"../assets/heart-64.png");
     SDL_QueryTexture(player.texture, NULL, NULL, &player.width, &player.height);
     SDL_QueryTexture(bullet.texture, NULL, NULL, &bullet.width, &bullet.height);
+    SDL_QueryTexture(heart.texture, NULL, NULL, &heart.width, &heart.height);
+
     // SDL_QueryTexture(enemy.texture, NULL, NULL, &enemy.width, &enemy.height);
     enemy.width = player.width;
     enemy.height = player.width;
@@ -73,6 +78,8 @@ int main(int argc, char *argv[])
             }
             break;
         case GS_PLAYING:
+
+            // player.score = app.score;
                     // 键盘输入移动玩家
             move(&app, &player, player.speed);
             // printf("x = %d,y = %d\n",player.x,player.y);
@@ -89,9 +96,12 @@ int main(int argc, char *argv[])
             llist_del_front(bullet_list,&hp,cmp_bullet_hp);
             llist_del_front(enemy_list,&hp,cmp_enemy_die_location);
 
+
+            reward(&app,enemy_list,&heart);
             //检测子弹与敌机
             check_collision(bullet_list, enemy_list,&app);
             check_e_p(enemy_list, &player);
+
 
 
             // 遍历：绘制 + 移动 + 标记死亡
@@ -99,12 +109,12 @@ int main(int argc, char *argv[])
             enemy_update(&app,enemy_list);
 
             //绘制得分
-
+            // printf("SCORE = %d\n",app.score);
             sprintf(score_buf, "Score: %d", app.score);
             drawText(&app, score_buf, 10, 10);
             
-            sprintf(score_buf, "HP: %d", player.hp);
-            drawText(&app, score_buf, SCREEN_WIDTH-130, 10);
+            sprintf(hp_buf, "HP: %d", player.hp);
+            drawText(&app, hp_buf, SCREEN_WIDTH-130, 10);
             if(player.hp<=0)
                 app.state = GS_OVER;
             break;

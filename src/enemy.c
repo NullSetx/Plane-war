@@ -20,8 +20,26 @@ void enemy_spawn(LinkedList *list, Enemy *enemy)
 
         insert_end(list,enemy);
     }
-
 }
+
+void reward(App *app,LinkedList *list,Enemy *reward)
+{   
+     static int last_milestone = 0;
+      int milestone = app->score / 500;
+
+    if(milestone>last_milestone)
+    {
+        last_milestone = milestone;
+        
+        reward->type = 9;
+        reward->y = -30;
+        reward->speed = 2+rand()%4;
+        reward->hp = 200;
+
+        insert_end(list,reward);
+    }
+}
+
 void enemy_update(App *app, LinkedList *list)
 {
      Node *Tail = NULL;

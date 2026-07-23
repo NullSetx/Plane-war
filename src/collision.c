@@ -42,7 +42,7 @@ void check_collision(LinkedList *bullet_list, LinkedList *enemy_list,App *app)
                 b->hp = 0;
                 e->hp -=b->damage;
                 app->score +=(int)(b->damage*1.5);
-                
+                // printf("HIT! damage=%d, score=%d\n", b->damage, app->score);
             }
         }
     }
@@ -56,6 +56,19 @@ void check_e_p(LinkedList *list,Plane *player)
             Enemy *e = (Enemy *)node->data;
             if(plane_hit_enemy(player, e))
             {
+                if(e->type==9)
+                {
+                    if(player->hp=100)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        player->hp+=20;
+                        e->hp=0;
+                    }
+                    continue;
+                }
                 player->hp-=20;
                 e->hp=0;
             }

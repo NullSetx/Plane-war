@@ -11,6 +11,7 @@ typedef struct Plane {
     int width, height;
     int speed;
     int hp;
+    int score;
     int fire_rate;
     int fire_timer;
     SDL_Texture *texture;
