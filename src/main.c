@@ -9,38 +9,91 @@
 #include "test_utils.h"
 #include "linked_list.h"
 #include "utils.h"
+#include "render.h"
 
 #define TEST_DATA 10
 
 int main(int argc, char const *argv[]) 
 { 
-    Enemy e;
-    Bullet b;
-    LinkedList *enemy_list = NULL,*bullet_list = NULL;
-    enemy_list = create_list(sizeof(Enemy));
-    bullet_list = create_list(sizeof(Bullet));
-    int i;
+    // Enemy e;
+    // Bullet b;
+    // LinkedList *enemy_list = NULL,*bullet_list = NULL;
+    // enemy_list = create_list(sizeof(Enemy));
+    // bullet_list = create_list(sizeof(Bullet));
+    // int i;
 
-    for(i = 0;i<TEST_DATA;i++)
+    // for(i = 0;i<TEST_DATA;i++)
+    // {
+    //     rand_enemy(&e);
+    //     insert_end(enemy_list, &e);
+
+    //     rand_bullet(&b, 1);  // 1 = 玩家子弹
+    //     insert_end(bullet_list, &b);
+    // }
+
+    // list_travel_next(enemy_list,ls_enemy);
+    // list_travel_next(bullet_list,ls_bullet);
+
+    // int leve = 3;
+    // llist_del_front(bullet_list,&leve,cmp_leve);
+
+    // printf("=============\n");
+    // list_travel_next(bullet_list,ls_bullet);
+
+    // llist_destroy(&enemy_list);
+    // llist_destroy(&bullet_list);
+
+    App app;
+    Plane player;
+    Bullet bullet;
+
+    memset(&app, 0, sizeof(App));
+    memset(&player,0,sizeof(Plane));
+    memset(&bullet,0,sizeof(Bullet));
+    initSDL(&app);
+    player.x = 100;
+    player.y = 100;
+    player.speed = 2;
+    player.texture = loadTexture(&app,"../assets/playerShip.png");
+    bullet.texture = loadTexture(&app,"../assets/laserBlue03.png");
+    SDL_QueryTexture(player.texture, NULL, NULL, &player.width, &player.height);
+    SDL_QueryTexture(bullet.texture, NULL, NULL, &bullet.width, &bullet.height);
+    while (1)
     {
-        rand_enemy(&e);
-        insert_end(enemy_list, &e);
+        prepareScene(&app);
 
-        rand_bullet(&b, 1);  // 1 = 玩家子弹
-        insert_end(bullet_list, &b);
+        if(doInput(&app))
+            break;
+
+        //键盘输入移动玩家
+        move(&app,&player,player.speed);
+        if (app.fire )
+        {
+            bullet.x = player.x+player.width/2;
+            bullet.y = player.y-player.height/2;
+            bullet.speed = 8;
+            bullet.level = 1;
+            bullet.is_player = 1;
+            bullet.hp = 1;
+        }
+        if(bullet.y<0)
+        {
+            bullet.hp = 0;
+        }
+        blit(&app,player.texture,player.x,player.y);
+        if(bullet.hp)
+        {
+             printf("bullet: %d, %d\n", bullet.x, bullet.y);
+            blit(&app,bullet.texture,bullet.x,bullet.y);
+            bullet.y-=bullet.speed;
+        }
+        presentScene(&app);
+
+        SDL_Delay(16);
     }
 
-    list_travel_next(enemy_list,ls_enemy);
-    list_travel_next(bullet_list,ls_bullet);
 
-    int leve = 3;
-    llist_del_front(bullet_list,&leve,cmp_leve);
 
-    printf("=============\n");
-    list_travel_next(bullet_list,ls_bullet);
-
-    llist_destroy(&enemy_list);
-    llist_destroy(&bullet_list);
-    
+    cleanup(&app);
     return 0;
 }
