@@ -4,7 +4,8 @@ void initSDL(App *app)
 {
     int rendererFlags, windowFlags;
 
-    rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+    rendererFlags = SDL_RENDERER_ACCELERATED ;
+    // | SDL_RENDERER_PRESENTVSYNC;
 ;
 
     windowFlags = 0;

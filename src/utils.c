@@ -36,3 +36,13 @@ int cmp_bullet_hp(const void *data1,const void *key)
     if(a->hp==*b) return 1;
     return 0;
 }
+
+int cmp_enemy_die_location(const void *data1, const void *key)
+{
+    Enemy *a = (Enemy *)data1;
+    int *b= (int *)key;
+
+    if(a->hp==*b) return 1;
+    if(a->y>SCREEN_HEIGHT) return 1;
+    return 0;
+}
