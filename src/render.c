@@ -3,10 +3,10 @@
 void initSDL(App *app)
 {
     int rendererFlags, windowFlags;
-
     rendererFlags = SDL_RENDERER_ACCELERATED ;
     // | SDL_RENDERER_PRESENTVSYNC;
-;
+
+    app->score = 0;
 
     windowFlags = 0;
 
@@ -35,6 +35,10 @@ void initSDL(App *app)
     }
 
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+    // 初始化
+  TTF_Init();
+  app->font = TTF_OpenFont("/System/Library/Fonts/Menlo.ttc", 24);  // 字号24
+  
 }
 // 键盘输入监听============
 int doInput(App *app)
@@ -91,6 +95,10 @@ void doKeyDown(App *app, SDL_KeyboardEvent *event)
         {
             app->fire = 1;
         }
+        if (event->keysym.scancode == SDL_SCANCODE_RETURN)
+        {
+            app->enter = 1;
+        }
     }
 }
 
@@ -120,6 +128,10 @@ void doKeyUp(App *app, SDL_KeyboardEvent *event)
         if (event->keysym.scancode == SDL_SCANCODE_J)
         {
             app->fire = 0;
+        }
+        if (event->keysym.scancode == SDL_SCANCODE_RETURN)
+        {
+            app->enter = 0;
         }
     }
 }
@@ -190,3 +202,15 @@ void blit(App *app, SDL_Texture *texture, int x, int y,int h,int w)
 
     SDL_RenderCopy(app->renderer, texture, NULL, &dest);
 }
+
+//绘制字体
+void drawText(App *app, const char *text, int x, int y)
+  {
+      SDL_Color white = {255, 255, 255};
+      SDL_Surface *surf = TTF_RenderText_Solid(app->font, text, white);
+      SDL_Texture *tex = SDL_CreateTextureFromSurface(app->renderer, surf);
+      SDL_Rect dest = {x, y, surf->w, surf->h};
+      SDL_RenderCopy(app->renderer, tex, NULL, &dest);
+      SDL_FreeSurface(surf);
+      SDL_DestroyTexture(tex);
+  }

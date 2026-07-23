@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 $(shell pkg-config --cflags sdl2) -Iinclude
-LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image)
+LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 
 # CFLAGS = -Wall -Wextra -g -Iinclude
 # LDFLAGS =

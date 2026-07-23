@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "defs.h"
 
 typedef struct Plane Plane;
@@ -14,7 +15,11 @@ typedef struct App {
     int down;
     int left;
     int right;
+    int enter;
     int fire;
+    int score;//得分
+    GameState state;//游戏状态
+    TTF_Font *font;
 } App;
 
 void initSDL(App *app);
@@ -27,5 +32,7 @@ void cleanup(App *app);
 int doInput(App *app);
 void doKeyDown(App *app, SDL_KeyboardEvent *event);
 void doKeyUp(App *app, SDL_KeyboardEvent *event);
+//绘制字体
+void drawText(App *app, const char *text, int x, int y);
 
 #endif
