@@ -46,6 +46,9 @@ int main(int argc, char *argv[])
     App app;
     Plane player;
     Bullet bullet;
+    Node *Tail = NULL;
+    LinkedList *enemy_list = NULL, *bullet_list = NULL;
+    bullet_list = create_list(sizeof(Bullet));
 
     memset(&app, 0, sizeof(App));
     memset(&player, 0, sizeof(Plane));
@@ -75,18 +78,46 @@ int main(int argc, char *argv[])
             bullet.level = 1;
             bullet.is_player = 1;
             bullet.hp = 1;
+            insert_end(bullet_list, &bullet);
         }
-        if (bullet.y < 0)
+        // 遍历子弹链表，更新位置并绘制
+        for (Tail = bullet_list->head.next; Tail != &bullet_list->head; Tail = Tail->next)
         {
-            bullet.hp = 0;
+            Bullet *b = (Bullet *)Tail->data;
+            if (b->hp)
+            {
+                blit(&app, b->texture, b->x, b->y);
+                b->y -= b->speed;
+                if (b->y < 0)
+                {
+                    b->hp = 0;
+                }
+            }
         }
+        // if (bullet.y < 0)
+        // {
+        //     bullet.hp = 0;
+        // }
         blit(&app, player.texture, player.x, player.y);
-        if (bullet.hp)
+
+        // 遍历子弹链表，更新位置并绘制
+        for (Tail = bullet_list->head.next; Tail != &bullet_list->head; Tail = Tail->next)
         {
-            printf("bullet: %d, %d\n", bullet.x, bullet.y);
-            blit(&app, bullet.texture, bullet.x, bullet.y);
-            bullet.y -= bullet.speed;
+            Bullet *b = (Bullet *)Tail->data;
+            if (b->hp)
+            {
+                printf("bullet: %d, %d\n", b->x, b->y);
+                blit(&app, b->texture, b->x, b->y);
+                b->y -= b->speed;
+            }
         }
+
+        // if (bullet.hp)
+        // {
+        //     printf("bullet: %d, %d\n", bullet.x, bullet.y);
+        //     blit(&app, bullet.texture, bullet.x, bullet.y);
+        //     bullet.y -= bullet.speed;
+        // }
         presentScene(&app);
 
         SDL_Delay(16);
