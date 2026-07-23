@@ -4,12 +4,7 @@
  * @date 2026-07-22
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "test_utils.h"
-#include "linked_list.h"
-#include "utils.h"
-#include "render.h"
+#include "head.h"
 
 #define TEST_DATA 10
 
@@ -46,9 +41,10 @@ int main(int argc, char *argv[])
     App app;
     Plane player;
     Bullet bullet;
-    Node *Tail = NULL;
+
     LinkedList *enemy_list = NULL, *bullet_list = NULL;
     bullet_list = create_list(sizeof(Bullet));
+    int hp=0;
 
     memset(&app, 0, sizeof(App));
     memset(&player, 0, sizeof(Plane));
@@ -57,6 +53,7 @@ int main(int argc, char *argv[])
     player.x = 100;
     player.y = 100;
     player.speed = 2;
+    player.fire_rate = 10;
     player.texture = loadTexture(&app, "../assets/playerShip.png");
     bullet.texture = loadTexture(&app, "../assets/laserBlue03.png");
     SDL_QueryTexture(player.texture, NULL, NULL, &player.width, &player.height);
@@ -70,57 +67,42 @@ int main(int argc, char *argv[])
 
         // 键盘输入移动玩家
         move(&app, &player, player.speed);
+        player.fire_timer++;
+        //开火初始化子弹
         if (app.fire)
-        {
-            bullet.x = player.x + player.width / 2;
-            bullet.y = player.y - player.height / 2;
-            bullet.speed = 8;
-            bullet.level = 1;
-            bullet.is_player = 1;
-            bullet.hp = 1;
-            insert_end(bullet_list, &bullet);
-        }
-        // 遍历子弹链表，更新位置并绘制
-        for (Tail = bullet_list->head.next; Tail != &bullet_list->head; Tail = Tail->next)
-        {
-            Bullet *b = (Bullet *)Tail->data;
-            if (b->hp)
-            {
-                blit(&app, b->texture, b->x, b->y);
-                b->y -= b->speed;
-                if (b->y < 0)
-                {
-                    b->hp = 0;
-                }
-            }
-        }
-        // if (bullet.y < 0)
-        // {
-        //     bullet.hp = 0;
-        // }
-        blit(&app, player.texture, player.x, player.y);
+            player_shoot(&player, &bullet, bullet_list);
 
-        // 遍历子弹链表，更新位置并绘制
-        for (Tail = bullet_list->head.next; Tail != &bullet_list->head; Tail = Tail->next)
-        {
-            Bullet *b = (Bullet *)Tail->data;
-            if (b->hp)
-            {
-                printf("bullet: %d, %d\n", b->x, b->y);
-                blit(&app, b->texture, b->x, b->y);
-                b->y -= b->speed;
-            }
-        }
 
-        // if (bullet.hp)
+        //绘制玩家飞机
+        blit(&app, player.texture, player.x, player.y,player.height,player.width);
+        //删除上一帧死亡的子弹
+        llist_del_front(bullet_list,&hp,cmp_bullet_hp);
+
+        // 遍历：绘制 + 移动 + 标记死亡
+        bullet_update(&app, bullet_list);
+        // for (Tail = bullet_list->head.next; Tail != &bullet_list->head; Tail = Tail->next)
         // {
-        //     printf("bullet: %d, %d\n", bullet.x, bullet.y);
-        //     blit(&app, bullet.texture, bullet.x, bullet.y);
-        //     bullet.y -= bullet.speed;
+        //     Bullet *b = (Bullet *)Tail->data;
+        //     // if (b->hp == 0)
+        //     // {
+        //     //     Node *del = Tail;
+        //     //     Tail = Tail->next;
+        //     //     // 摘链
+        //     //     del->prev->next = del->next;
+        //     //     del->next->prev = del->prev;
+        //     //     free(b);
+        //     //     free(del);
+        //     //     bullet_list->num--;
+        //     //     continue;
+        //     // }
+        //     blit(&app, b->texture, b->x, b->y,b->height,b->width);
+        //     b->y -= b->speed;
+        //     if (b->y < 0)
+        //         b->hp = 0;
         // }
         presentScene(&app);
 
-        SDL_Delay(16);
+        // SDL_Delay(16);
     }
 
     cleanup(&app);

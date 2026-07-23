@@ -1,9 +1,9 @@
 #ifndef TEST_UTILS_H
 #define TEST_UTILS_H
 
-#include "plane.h"
-#include "enemy.h"
-#include "bullet.h"
+typedef struct Plane Plane;
+typedef struct Enemy Enemy;
+typedef struct Bullet Bullet;
 
 void rand_plane(Plane *p);
 void rand_enemy(Enemy *e);

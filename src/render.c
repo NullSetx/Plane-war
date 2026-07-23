@@ -1,11 +1,11 @@
-#include "render.h"
-#include <stdio.h>
+#include "head.h"
 
 void initSDL(App *app)
 {
     int rendererFlags, windowFlags;
 
-    rendererFlags = SDL_RENDERER_ACCELERATED;
+    rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+;
 
     windowFlags = 0;
 
@@ -176,14 +176,16 @@ SDL_Texture *loadTexture(App *app, char *filename)
 }
 
 // 绘制纹理
-void blit(App *app, SDL_Texture *texture, int x, int y)
+void blit(App *app, SDL_Texture *texture, int x, int y,int h,int w)
 {
     SDL_Rect dest;
 
     dest.x = x;
     dest.y = y;
+    dest.w = w;
+    dest.h  = h;
 
-    SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+    // SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
     SDL_RenderCopy(app->renderer, texture, NULL, &dest);
 }

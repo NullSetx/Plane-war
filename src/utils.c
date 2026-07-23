@@ -1,7 +1,4 @@
-#include "utils.h"
-#include "enemy.h"
-#include "bullet.h"
-#include <stdio.h>
+#include "head.h"
 
 void ls_enemy(const void *data)
 {
@@ -28,5 +25,14 @@ int cmp_leve(const void *data1,const void *key)
     int *b= (int *)key;
 
     if(a->level==*b) return 1;
+    return 0;
+}
+
+int cmp_bullet_hp(const void *data1,const void *key)
+{
+    Bullet *a = (Bullet *)data1;
+    int *b= (int *)key;
+
+    if(a->hp==*b) return 1;
     return 0;
 }

@@ -1,5 +1,4 @@
-#include "test_utils.h"
-#include <stdlib.h>
+#include "head.h"
 
 void rand_plane(Plane *p)
 {
