@@ -92,6 +92,9 @@ int main(int argc, char *argv[])
         llist_del_front(bullet_list,&hp,cmp_bullet_hp);
         llist_del_front(enemy_list,&hp,cmp_enemy_die_location);
 
+        //检测子弹与敌机
+        check_collision(bullet_list, enemy_list);
+
 
         // 遍历：绘制 + 移动 + 标记死亡
         bullet_update(&app, bullet_list);

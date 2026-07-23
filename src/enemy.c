@@ -7,15 +7,15 @@ void enemy_spawn(LinkedList *list, Enemy *enemy)
 
     timer++;
     srand(time(NULL));
-    if(timer >60)
+    if(timer >ENEMY_SPAWN_RATE)
     {
         //计时器归零
         timer = 0;
 
         enemy->x = rand() % (SCREEN_WIDTH - 30);
         enemy->y = -30;
-        enemy->speed = 2;
-        enemy->hp = 100;
+        enemy->speed = 1 + rand()%4;
+        enemy->hp = ENEMY_HP;
         enemy->type = 0;
 
         insert_end(list,enemy);
