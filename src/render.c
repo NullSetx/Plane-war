@@ -3,8 +3,7 @@
 void initSDL(App *app)
 {
     int rendererFlags, windowFlags;
-    rendererFlags = SDL_RENDERER_ACCELERATED ;
-    // | SDL_RENDERER_PRESENTVSYNC;
+    rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
     app->score = 0;
 
@@ -36,9 +35,9 @@ void initSDL(App *app)
 
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     // 初始化
-  TTF_Init();
-  app->font = TTF_OpenFont("/System/Library/Fonts/Menlo.ttc", 24);  // 字号24
-  
+    TTF_Init();
+    //   app->font = TTF_OpenFont("/System/Library/Fonts/Menlo.ttc", 24);  // 字号24
+    app->font = TTF_OpenFont("../assets//JETBRAINSMONO-REGULAR.TTF", 24);
 }
 // 键盘输入监听============
 int doInput(App *app)
@@ -189,28 +188,28 @@ SDL_Texture *loadTexture(App *app, char *filename)
 }
 
 // 绘制纹理
-void blit(App *app, SDL_Texture *texture, int x, int y,int h,int w)
+void blit(App *app, SDL_Texture *texture, int x, int y, int h, int w)
 {
     SDL_Rect dest;
 
     dest.x = x;
     dest.y = y;
     dest.w = w;
-    dest.h  = h;
+    dest.h = h;
 
     // SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
     SDL_RenderCopy(app->renderer, texture, NULL, &dest);
 }
 
-//绘制字体
+// 绘制字体
 void drawText(App *app, const char *text, int x, int y)
-  {
-      SDL_Color white = {255, 255, 255};
-      SDL_Surface *surf = TTF_RenderText_Solid(app->font, text, white);
-      SDL_Texture *tex = SDL_CreateTextureFromSurface(app->renderer, surf);
-      SDL_Rect dest = {x, y, surf->w, surf->h};
-      SDL_RenderCopy(app->renderer, tex, NULL, &dest);
-      SDL_FreeSurface(surf);
-      SDL_DestroyTexture(tex);
-  }
+{
+    SDL_Color white = {255, 255, 255};
+    SDL_Surface *surf = TTF_RenderText_Solid(app->font, text, white);
+    SDL_Texture *tex = SDL_CreateTextureFromSurface(app->renderer, surf);
+    SDL_Rect dest = {x, y, surf->w, surf->h};
+    SDL_RenderCopy(app->renderer, tex, NULL, &dest);
+    SDL_FreeSurface(surf);
+    SDL_DestroyTexture(tex);
+}

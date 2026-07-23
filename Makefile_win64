@@ -19,7 +19,7 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 ifeq ($(OS),Windows_NT)
     # Windows 下手动指定 SDL2 路径（请根据实际路径修改）
     SDL2_INC = -I./SDL2/include
-    SDL2_LIB = -L./SDL2/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+    SDL2_LIB = -L./SDL2/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
     CFLAGS += $(SDL2_INC)
     LDFLAGS += $(SDL2_LIB) -mwindows
     # Windows 创建目录和清理命令
