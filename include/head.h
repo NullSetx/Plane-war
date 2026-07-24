@@ -20,6 +20,7 @@
 #include "plane.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "leaderboard.h"
 
 // ===== 功能模块（依赖上面的结构体） =====
 #include "render.h"

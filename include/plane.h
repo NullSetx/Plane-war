@@ -3,6 +3,8 @@
 
 #include <SDL2/SDL.h>
 
+#define MAX_NAME_LEN 16
+
 typedef struct Bullet Bullet;
 typedef struct LinkedList LinkedList;
 
@@ -14,6 +16,7 @@ typedef struct Plane {
     int score;
     int fire_rate;
     int fire_timer;
+    char *name[MAX_NAME_LEN];
     SDL_Texture *texture;
 } Plane;
 

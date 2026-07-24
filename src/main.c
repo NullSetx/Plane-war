@@ -16,8 +16,10 @@ int main(int argc, char *argv[])
     Bullet bullet;
     Enemy enemy;
     Enemy heart;
+    Score score;
 
-    LinkedList *enemy_list = NULL, *bullet_list = NULL;
+    LinkedList *enemy_list = NULL, *bullet_list = NULL,*leadferboard = NULL;
+    leadferboard = create_list(sizeof(Score));
     bullet_list = create_list(sizeof(Bullet));
     enemy_list = create_list(sizeof(Enemy));
     int hp = 0;
@@ -28,6 +30,7 @@ int main(int argc, char *argv[])
     memset(&player, 0, sizeof(Plane));
     memset(&bullet, 0, sizeof(Bullet));
     memset(&enemy, 0, sizeof(Enemy));
+    memset(&score,0,sizeof(Score));
 
     initSDL(&app);
     srand(time(NULL));
@@ -39,6 +42,8 @@ int main(int argc, char *argv[])
     player.speed = 2;
     player.fire_rate = 10;
     player.hp = 100;
+    strcpy(player.name,"NullSet");
+
     player.texture = loadTexture(&app, "../assets/playerShip.png");
     bullet.texture = loadTexture(&app, "../assets/laserBlue03.png");
     enemy.texture = loadTexture(&app, "../assets/enemyGreen2.png");
@@ -110,10 +115,14 @@ int main(int argc, char *argv[])
             sprintf(hp_buf, "HP: %d", player.hp);
             drawText(&app, hp_buf, SCREEN_WIDTH - 130, 10);
             if (player.hp <= 0)
+            {
                 app.state = GS_OVER;
+                lb_update(leadferboard, &score, app.score, player.name, "../assets/data.txt");
+            }   
             SDL_Delay(16);
             break;
         case GS_OVER:
+           
             drawText(&app, "GAME OVER", SCREEN_WIDTH / 2 - 80, 300);
             drawText(&app, "Press ENTER to Restart", SCREEN_WIDTH / 2 - 150, 350);
             break;

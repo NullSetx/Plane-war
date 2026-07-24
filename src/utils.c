@@ -19,6 +19,19 @@ void ls_bullet(const void *data)
         bullet->speed,bullet->damage,bullet->level,bullet->is_player);
 }
 
+void ls_score(const void *data)
+{   
+    static int count = 0;
+    if(data ==NULL) return;
+    Score *score = (Score *)data;
+    if(count==0)
+    {
+        printf("\tuser\tscore\n");
+        count++;
+    }
+    printf("\t%s\t%d\n",score->name,score->score);
+}
+
 int cmp_leve(const void *data1,const void *key)
 {
     Bullet *a = (Bullet *)data1;
@@ -44,7 +57,7 @@ int cmp_enemy_die_location(const void *data1, const void *key)
 
     if(a->hp==*b) 
     {
-        
+
         return 1;  
     }
     if(a->y>SCREEN_HEIGHT) return 1;

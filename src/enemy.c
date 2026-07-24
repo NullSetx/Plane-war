@@ -12,7 +12,7 @@ void enemy_spawn(LinkedList *list, Enemy *enemy)
         // 计时器归零
         timer = 0;
 
-        enemy->x = rand() % (SCREEN_WIDTH - 30);
+        enemy->x = enemy->width + rand() % (SCREEN_WIDTH - 2 * enemy->width);
         enemy->y = -30;
         enemy->speed = 1 + rand() % 4;
         enemy->hp = ENEMY_HP;
