@@ -17,7 +17,9 @@ typedef struct App {
     int right;
     int enter;
     int fire;
+    int esc;
     int score;//得分
+    int sortstate;
     GameState state;//游戏状态
     TTF_Font *font;
 } App;
@@ -34,5 +36,7 @@ void doKeyDown(App *app, SDL_KeyboardEvent *event);
 void doKeyUp(App *app, SDL_KeyboardEvent *event);
 //绘制字体
 void drawText(App *app, const char *text, int x, int y);
+//绘制排行榜
+void lb_draw(App *app, LinkedList *list, int x, int y);
 
 #endif

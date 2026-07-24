@@ -1,3 +1,8 @@
+/**
+ * @file plane.c
+ * @brief 玩家射击逻辑
+ * @date 2026-07-22
+ */
 
 #include "head.h"
 

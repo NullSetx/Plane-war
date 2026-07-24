@@ -1,5 +1,18 @@
+/**
+ * @file leaderboard.c
+ * @brief 排行榜读写与更新
+ * @date 2026-07-22
+ */
+
 #include "head.h"
 
+
+int cmp_score(const void *a, const void *b)
+{
+    const Score *s1 = a;
+    const Score *s2 = b;
+    return s1->score - s2->score;
+}
 
 void lb_insert(LinkedList *list, Score *Sc,int score, const char *name)
 {   
@@ -55,7 +68,7 @@ ERP1:
 // 单局得分插入链表
 void lb_update(LinkedList *list, Score *Sc, int score, const char *name, const char *filename)
 {
-    lb_load(list, filename);          // 读旧排行
+    // lb_load(list, filename);          // 读旧排行
     lb_insert(list, Sc, score, name); // 插入新分数
     lb_save(list, filename);          // 写回文件
     list_travel_next(list,ls_score);

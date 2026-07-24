@@ -7,6 +7,8 @@
 
 typedef void (llist_op_t)(const void *);
 typedef int  (llist_cmp_t)(const void *, const void *);
+typedef int (llist_sort_t)(const void *, const void *);
+typedef enum { ASCENDING, DESCENDING } SORT;
 
 typedef struct Node {
     void *data;
@@ -25,5 +27,7 @@ int insert_end(LinkedList *handle, void *data);
 void list_travel_next(LinkedList *handle, llist_op_t *op);
 void llist_del_front(LinkedList *handle, void *key, llist_cmp_t *cmp);
 void llist_destroy(LinkedList **handle);
+void llist_sort(LinkedList *handle, llist_sort_t *sort, SORT flag);
+void llist_clear(LinkedList *handle);
 
 #endif

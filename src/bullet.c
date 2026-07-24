@@ -1,3 +1,9 @@
+/**
+ * @file bullet.c
+ * @brief 子弹更新与绘制
+ * @date 2026-07-22
+ */
+
 #include "head.h"
 
 

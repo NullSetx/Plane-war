@@ -16,7 +16,7 @@ typedef struct Plane {
     int score;
     int fire_rate;
     int fire_timer;
-    char *name[MAX_NAME_LEN];
+    char name[MAX_NAME_LEN];
     SDL_Texture *texture;
 } Plane;
 

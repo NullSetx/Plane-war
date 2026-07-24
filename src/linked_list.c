@@ -1,6 +1,6 @@
 /**
- * @file main.c
- * @brief 链表 操作函数实现 增删改查 遍历销毁
+ * @file linked_list.c
+ * @brief 双向循环链表操作：增删改查、遍历、排序、销毁
  * @date 2026-07-22
  */
 
@@ -64,6 +64,50 @@ void llist_del_front(LinkedList *handle, void *key, llist_cmp_t *cmp)
             return;
         }
     }
+}
+
+
+
+
+
+void llist_sort(LinkedList *handle, llist_sort_t *sort, SORT flag)
+{
+    Node *p1, *p2;
+    void *tmp;
+
+    for (p1 = handle->head.next; p1 != &handle->head; p1 = p1->next)
+    {
+        for (p2 = p1->next; p2 != &handle->head; p2 = p2->next)
+        {
+            if (flag == ASCENDING && sort(p1->data, p2->data) > 0)
+            {
+                tmp = p1->data;           // 只交换数据指针
+                p1->data = p2->data;
+                p2->data = tmp;
+            }
+            else if (flag == DESCENDING && sort(p1->data, p2->data) < 0)
+            {
+                tmp = p1->data;
+                p1->data = p2->data;
+                p2->data = tmp;
+            }
+        }
+    }
+}
+
+// 清空所有节点，保留链表句柄
+void llist_clear(LinkedList *handle)
+{
+    Node *cur, *save;
+    for (cur = handle->head.next; cur != &handle->head; cur = save)
+    {
+        save = cur->next;
+        free(cur->data);
+        free(cur);
+    }
+    handle->head.next = &handle->head;
+    handle->head.prev = &handle->head;
+    handle->num = 0;
 }
 
 //销毁链表

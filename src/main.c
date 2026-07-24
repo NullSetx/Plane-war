@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
     int hp = 0;
     char score_buf[32];
     char hp_buf[32];
+    char filename[] = "../assets/data.txt";
 
     memset(&app, 0, sizeof(App));
     memset(&player, 0, sizeof(Plane));
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
 
     if (!enemy.texture)
         printf("========================");
-
+    lb_load(leadferboard,filename);
     while (1)
     {
         prepareScene(&app);
@@ -69,15 +70,23 @@ int main(int argc, char *argv[])
         switch (app.state)
         {
         case GS_MENU:
-            drawText(&app, "PLANE WAR", SCREEN_WIDTH / 2 - 80, 300);
-            drawText(&app, "Press ENTER to Start", SCREEN_WIDTH / 2 - 140, 350);
+            //排序，默认降序，按u切换升序
+            llist_sort(leadferboard, cmp_score, app.sortstate % 2 ? ASCENDING : DESCENDING);
+            lb_draw(&app, leadferboard, 120, 200);
+            drawText(&app, "PLANE WAR", SCREEN_WIDTH / 2 - 70, 500);
+            drawText(&app, "Press ENTER to Start", SCREEN_WIDTH / 2 - 140, 550);
+            drawText(&app, "WASD - Move  J - Fire", SCREEN_WIDTH / 2 - 140, 580);
+            drawText(&app, "U - Sort  ESC - Quit", SCREEN_WIDTH / 2 - 130, 610);
             if (app.enter) // doKeyDown 里处理回车
             {
                 app.state = GS_PLAYING;
                 // 重置游戏数据
                 app.score = 0;
                 player.hp = 100;
-                // 清空链表...
+                player.x = 240;
+                player.y = 600;
+                llist_clear(enemy_list);
+                llist_clear(bullet_list);
             }
             break;
         case GS_PLAYING:
@@ -117,16 +126,31 @@ int main(int argc, char *argv[])
             if (player.hp <= 0)
             {
                 app.state = GS_OVER;
-                lb_update(leadferboard, &score, app.score, player.name, "../assets/data.txt");
+                lb_update(leadferboard, &score, app.score, player.name, filename);
             }   
             SDL_Delay(16);
             break;
         case GS_OVER:
-           
-            drawText(&app, "GAME OVER", SCREEN_WIDTH / 2 - 80, 300);
-            drawText(&app, "Press ENTER to Restart", SCREEN_WIDTH / 2 - 150, 350);
+            llist_sort(leadferboard, cmp_score, app.sortstate % 2 ? ASCENDING : DESCENDING);
+            lb_draw(&app, leadferboard, 120, 200);
+            drawText(&app, "GAME OVER", SCREEN_WIDTH / 2 - 70, 500);
+            drawText(&app, "Press ENTER to Restart", SCREEN_WIDTH / 2 - 150, 550);
+            drawText(&app, "Press ESC to Quit", SCREEN_WIDTH / 2 - 120, 580);
+            if (app.enter)
+            {
+                app.state = GS_PLAYING;
+                app.score = 0;
+                player.hp = 100;
+                player.x = 240;
+                player.y = 600;
+                llist_clear(enemy_list);
+                llist_clear(bullet_list);
+            }
             break;
         }
+
+        if (app.esc)
+            break;
 
         presentScene(&app);
     }

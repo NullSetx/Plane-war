@@ -1,3 +1,9 @@
+/**
+ * @file collision.c
+ * @brief 碰撞检测（子弹-敌机、玩家-敌机）
+ * @date 2026-07-22
+ */
+
 #include "head.h"
 
 // 矩形重叠判断
@@ -55,6 +61,8 @@ void check_e_p(LinkedList *list, Plane *player)
     for (node = list->head.next; node != &list->head; node = node->next)
     {
         Enemy *e = (Enemy *)node->data;
+        if (!e->hp)
+            continue;
         if (plane_hit_enemy(player, e))
         {
             if (e->type == 9)

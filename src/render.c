@@ -1,3 +1,9 @@
+/**
+ * @file render.c
+ * @brief SDL2 初始化、输入处理、纹理/字体绘制
+ * @date 2026-07-22
+ */
+
 #include "head.h"
 
 void initSDL(App *app)
@@ -98,6 +104,14 @@ void doKeyDown(App *app, SDL_KeyboardEvent *event)
         {
             app->enter = 1;
         }
+        if (event->keysym.scancode == SDL_SCANCODE_U)
+        {
+            app->sortstate +=1 ;
+        }
+        if (event->keysym.scancode == SDL_SCANCODE_ESCAPE)
+        {
+            app->esc = 1;
+        }
     }
 }
 
@@ -132,6 +146,10 @@ void doKeyUp(App *app, SDL_KeyboardEvent *event)
         {
             app->enter = 0;
         }
+        if (event->keysym.scancode == SDL_SCANCODE_ESCAPE)
+        {
+            app->esc = 0;
+        }
     }
 }
 // 边界判断
@@ -162,6 +180,7 @@ void presentScene(App *app)
 {
     SDL_RenderPresent(app->renderer);
 }
+
 
 // 销毁
 void cleanup(App *app)
@@ -213,3 +232,23 @@ void drawText(App *app, const char *text, int x, int y)
     SDL_FreeSurface(surf);
     SDL_DestroyTexture(tex);
 }
+//绘制排行榜
+  void lb_draw(App *app, LinkedList *list, int x, int y)
+  {
+      char buf[64];
+      int rank = 1;
+      Node *cur;
+
+      drawText(app, "-- Leaderboard --", x, y);
+      y += 30;
+
+      for (cur = list->head.next; cur != &list->head; cur = cur->next)
+      {
+          Score *s = (Score *)cur->data;
+          sprintf(buf, "%d. %s  %d", rank, s->name, s->score);
+          drawText(app, buf, x, y);
+          y += 25;
+          rank++;
+          if (rank > 10) break;   // 只显示前10
+      }
+  }

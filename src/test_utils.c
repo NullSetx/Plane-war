@@ -1,3 +1,9 @@
+/**
+ * @file test_utils.c
+ * @brief 测试工具函数（随机数据生成、打印）
+ * @date 2026-07-22
+ */
+
 #include "head.h"
 
 void rand_plane(Plane *p)

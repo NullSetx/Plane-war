@@ -1,3 +1,9 @@
+/**
+ * @file enemy.c
+ * @brief 敌机生成、奖励、更新
+ * @date 2026-07-22
+ */
+
 #include "head.h"
 
 void enemy_spawn(LinkedList *list, Enemy *enemy)

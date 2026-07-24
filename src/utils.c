@@ -1,3 +1,9 @@
+/**
+ * @file utils.c
+ * @brief 通用工具函数（比较、打印回调）
+ * @date 2026-07-22
+ */
+
 #include "head.h"
 
 void ls_enemy(const void *data)
@@ -62,4 +68,9 @@ int cmp_enemy_die_location(const void *data1, const void *key)
     }
     if(a->y>SCREEN_HEIGHT) return 1;
     return 0;
+}
+
+int sort_age(const void *d1, const void *d2)
+{
+	return (((Score *)d1)->score - ((Score *)d2)->score);
 }

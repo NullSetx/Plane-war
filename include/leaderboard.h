@@ -12,6 +12,8 @@
       char name[MAX_NAME_LEN];
   } Score;
 
+  // 分数比较
+  int cmp_score(const void *a, const void *b);
   //更新排行榜
   void lb_update(LinkedList *list,Score *Sc,int score,const char *name,const char *filename);
 
