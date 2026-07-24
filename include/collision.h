@@ -7,8 +7,9 @@ typedef struct LinkedList LinkedList;
 typedef void (plane_op_t)(const void *);
 
 int rect_collide(Bullet *b, Enemy *e);
-void check_collision(LinkedList *bullet_list, LinkedList *enemy_list,App *app);
-void check_e_p(LinkedList *enemy_list,Plane *player);
+void check_collision(LinkedList *bullet_list, LinkedList *enemy_list, App *app);
+void check_e_p(LinkedList *enemy_list, Plane *player);
+void check_bullet_player(LinkedList *bullet_list, Plane *player);
 
 
 #endif 

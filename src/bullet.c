@@ -25,9 +25,12 @@ void bullet_update(App *app, LinkedList *list)
         //     bullet_list->num--;
         //     continue;
         // }
-        blit(app, b->texture, b->x, b->y,b->height,b->width);
-        b->y -= b->speed;
-        if (b->y < 0)
+        blit(app, b->texture, b->x, b->y, b->height, b->width);
+        if (b->is_player)
+            b->y -= b->speed;
+        else
+            b->y += b->speed;
+        if (b->y < 0 || b->y > SCREEN_HEIGHT)
             b->hp = 0;
     }
 }

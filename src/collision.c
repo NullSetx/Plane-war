@@ -36,6 +36,8 @@ void check_collision(LinkedList *bullet_list, LinkedList *enemy_list, App *app)
         Bullet *b = (Bullet *)bn->data;
         if (!b->hp)
             continue;
+        if (!b->is_player)       // 只检查玩家子弹 vs 敌机
+            continue;
 
         Node *en;
         for (en = enemy_list->head.next; en != &enemy_list->head; en = en->next)
@@ -49,8 +51,28 @@ void check_collision(LinkedList *bullet_list, LinkedList *enemy_list, App *app)
                 b->hp = 0;
                 e->hp -= b->damage;
                 app->score += (int)(b->damage * 1.5);
-                // printf("HIT! damage=%d, score=%d\n", b->damage, app->score);
             }
+        }
+    }
+}
+
+// 敌机子弹 vs 玩家
+void check_bullet_player(LinkedList *bullet_list, Plane *player)
+{
+    Node *bn;
+    for (bn = bullet_list->head.next; bn != &bullet_list->head; bn = bn->next)
+    {
+        Bullet *b = (Bullet *)bn->data;
+        if (!b->hp)
+            continue;
+        if (b->is_player)        // 只检查敌机子弹
+            continue;
+
+        if (rect_hit(b->x, b->y, b->width, b->height,
+                     player->x, player->y, player->width, player->height))
+        {
+            player->hp -= b->damage;
+            b->hp = 0;
         }
     }
 }

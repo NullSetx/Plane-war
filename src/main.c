@@ -14,21 +14,25 @@ int main(int argc, char *argv[])
     App app;
     Plane player;
     Bullet bullet;
+    Bullet enemy_bullet;
     Enemy enemy;
     Enemy heart;
     Score score;
 
-    LinkedList *enemy_list = NULL, *bullet_list = NULL,*leadferboard = NULL;
-    leadferboard = create_list(sizeof(Score));
-    bullet_list = create_list(sizeof(Bullet));
-    enemy_list = create_list(sizeof(Enemy));
     int hp = 0;
     char score_buf[32];
     char hp_buf[32];
     char filename[] = "../assets/data.txt";
 
+    LinkedList *enemy_list = NULL, *bullet_list = NULL,*leadferboard = NULL;
+    leadferboard = create_list(sizeof(Score));
+    bullet_list = create_list(sizeof(Bullet));
+    enemy_list = create_list(sizeof(Enemy));
+
+
     memset(&app, 0, sizeof(App));
     memset(&bullet, 0, sizeof(Bullet));
+    memset(&enemy_bullet, 0, sizeof(Bullet));
     memset(&enemy, 0, sizeof(Enemy));
     memset(&score, 0, sizeof(Score));
 
@@ -40,15 +44,20 @@ int main(int argc, char *argv[])
     initPlayer(&app, &player);
 
     bullet.texture = loadTexture(&app, "../assets/laserBlue03.png");
+    enemy_bullet.texture = loadTexture(&app, "../assets/b.png");
     enemy.texture = loadTexture(&app, "../assets/enemyGreen2.png");
     heart.texture = loadTexture(&app, "../assets/heart-64.png");
     SDL_QueryTexture(player.texture, NULL, NULL, &player.width, &player.height);
     SDL_QueryTexture(bullet.texture, NULL, NULL, &bullet.width, &bullet.height);
+    SDL_QueryTexture(enemy_bullet.texture, NULL, NULL, &enemy_bullet.width, &enemy_bullet.height);
     SDL_QueryTexture(heart.texture, NULL, NULL, &heart.width, &heart.height);
 
     // SDL_QueryTexture(enemy.texture, NULL, NULL, &enemy.width, &enemy.height);
     enemy.width = player.width;
     enemy.height = player.width;
+    enemy_bullet.width = bullet.width+5;
+    enemy_bullet.height = bullet.width+5;
+
 
     lb_load(leadferboard,filename);
     while (1)
@@ -97,15 +106,16 @@ int main(int argc, char *argv[])
             // 删除上一帧死亡的子弹
             llist_del_front(bullet_list, &hp, cmp_bullet_hp);
             llist_del_front(enemy_list, &hp, cmp_enemy_die_location);
-
+            //生成奖励
             reward(&app, enemy_list, &heart);
             // 检测子弹与敌机
             check_collision(bullet_list, enemy_list, &app);
+            check_bullet_player(bullet_list, &player);
             check_e_p(enemy_list, &player);
 
             // 遍历：绘制 + 移动 + 标记死亡
             bullet_update(&app, bullet_list);
-            enemy_update(&app, enemy_list);
+            enemy_update(&app, enemy_list, bullet_list, &enemy_bullet);
 
             // 绘制得分
             //  printf("SCORE = %d\n",app.score);

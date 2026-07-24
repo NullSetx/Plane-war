@@ -186,7 +186,7 @@ void presentScene(App *app)
 // 销毁
 void cleanup(App *app)
 {
-    printf("退出====\n");
+    printf("退出\n");
     SDL_DestroyRenderer(app->renderer);
     SDL_DestroyWindow(app->window);
     SDL_Quit();

@@ -23,6 +23,8 @@ void enemy_spawn(LinkedList *list, Enemy *enemy)
         enemy->speed = 1 + rand() % 4;
         enemy->hp = ENEMY_HP;
         enemy->type = 0;
+        enemy->fire_rate = 60 + rand() % 120;  // 1~3秒一发
+        enemy->fire_timer = 0;
 
         insert_end(list, enemy);
     }
@@ -46,16 +48,34 @@ void reward(App *app, LinkedList *list, Enemy *reward)
     }
 }
 
-void enemy_update(App *app, LinkedList *list)
+void enemy_shoot(Enemy *enemy, Bullet *tpl, LinkedList *bullet_list)
+{
+    if (enemy->fire_timer >= enemy->fire_rate)
+    {
+        tpl->x = enemy->x + enemy->width / 2;
+        tpl->y = enemy->y + enemy->height;
+        tpl->speed = 4;
+        tpl->is_player = 0;
+        tpl->hp = 1;
+        tpl->damage = 10;
+        insert_end(bullet_list, tpl);
+        enemy->fire_timer = 0;
+    }
+}
+
+void enemy_update(App *app, LinkedList *enemy_list, LinkedList *bullet_list, Bullet *tpl)
 {
     Node *Tail = NULL;
-    for (Tail = list->head.next; Tail != &list->head; Tail = Tail->next)
+    for (Tail = enemy_list->head.next; Tail != &enemy_list->head; Tail = Tail->next)
     {
         Enemy *e = (Enemy *)Tail->data;
+        if (!e->hp)
+            continue;
 
         blit(app, e->texture, e->x, e->y, e->height, e->width);
         e->y += e->speed;
-        // if (b->y < 0)
-        //     b->hp = 0;
+
+        e->fire_timer++;
+        enemy_shoot(e, tpl, bullet_list);
     }
 }
