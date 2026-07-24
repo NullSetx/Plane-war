@@ -176,6 +176,7 @@ void prepareScene(App *app)
     SDL_RenderClear(app->renderer);
 }
 
+// 交换缓冲区，将后台绘制的内容显示到窗口
 void presentScene(App *app)
 {
     SDL_RenderPresent(app->renderer);

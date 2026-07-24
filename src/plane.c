@@ -6,6 +6,20 @@
 
 #include "head.h"
 
+void initPlayer(App *app, Plane *player)
+{
+    memset(player, 0, sizeof(Plane));
+    player->x = 240;
+    player->y = 600;
+    player->speed = 2;
+    player->fire_rate = 10;
+    player->hp = 100;
+    strcpy(player->name, "NullSet");
+
+    player->texture = loadTexture(app, "../assets/playerShip.png");
+    SDL_QueryTexture(player->texture, NULL, NULL, &player->width, &player->height);
+}
+
 void player_shoot(Plane *player, Bullet *tpl, LinkedList *bullet_list)
   {
       if (player->fire_timer >= player->fire_rate)

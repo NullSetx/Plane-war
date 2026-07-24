@@ -28,24 +28,17 @@ int main(int argc, char *argv[])
     char filename[] = "../assets/data.txt";
 
     memset(&app, 0, sizeof(App));
-    memset(&player, 0, sizeof(Plane));
     memset(&bullet, 0, sizeof(Bullet));
     memset(&enemy, 0, sizeof(Enemy));
-    memset(&score,0,sizeof(Score));
+    memset(&score, 0, sizeof(Score));
 
     initSDL(&app);
     srand(time(NULL));
 
     app.state = GS_MENU;
+    //初始化玩家
+    initPlayer(&app, &player);
 
-    player.x = 240;
-    player.y = 600;
-    player.speed = 2;
-    player.fire_rate = 10;
-    player.hp = 100;
-    strcpy(player.name,"NullSet");
-
-    player.texture = loadTexture(&app, "../assets/playerShip.png");
     bullet.texture = loadTexture(&app, "../assets/laserBlue03.png");
     enemy.texture = loadTexture(&app, "../assets/enemyGreen2.png");
     heart.texture = loadTexture(&app, "../assets/heart-64.png");
@@ -57,8 +50,6 @@ int main(int argc, char *argv[])
     enemy.width = player.width;
     enemy.height = player.width;
 
-    if (!enemy.texture)
-        printf("========================");
     lb_load(leadferboard,filename);
     while (1)
     {
@@ -154,7 +145,10 @@ int main(int argc, char *argv[])
 
         presentScene(&app);
     }
-
+    //销毁链表
+    llist_destroy(&enemy_list);
+    llist_destroy(&bullet_list);
+    llist_destroy(&leadferboard);
     cleanup(&app);
     return 0;
 }

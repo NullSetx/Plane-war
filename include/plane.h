@@ -5,6 +5,8 @@
 
 #define MAX_NAME_LEN 16
 
+typedef struct App App;
+
 typedef struct Bullet Bullet;
 typedef struct LinkedList LinkedList;
 
@@ -20,6 +22,8 @@ typedef struct Plane {
     SDL_Texture *texture;
 } Plane;
 
+void initPlayer(App *app, Plane *player);
+//玩家射击
 void player_shoot(Plane *player, Bullet *tpl, LinkedList *bullet_list);
 
 #endif
